@@ -1,0 +1,2 @@
+include README.rst
+recursive-include ckanext/montrosemaps *.html *.json *.js *.less *.css

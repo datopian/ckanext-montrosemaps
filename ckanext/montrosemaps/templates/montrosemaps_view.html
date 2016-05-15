@@ -1,0 +1,30 @@
+{% resource 'montrosemaps/main' %}
+
+<div class="hero-map-wrap">
+    <div class="hero-controls">
+        <div class="hero-block hero-info-select">
+            <div class="media hero-info">
+                <div class="media-left">
+                    <img id="map-info-img" class="language-flag" src="/images/usedata-info-icon.svg" width="41" alt="icon">
+                </div>
+                <div class="media-body">Select from the menu below the data that you wish to display on the map. Zoom in
+                    for more detail using the zoom bar.
+                </div>
+            </div>
+            <div class="hero-select">
+                <select id="dataset" class="form-control"></select>
+            </div>
+        </div>
+        <div class="hero-block hero-country">
+            <h2 class="hero-country-title">Kenya</h2>
+        </div>
+    </div>
+    <div
+            data-module="montrose_maps"
+            data-module-resource-id="{{ resource.id }}"
+            data-module-resource-url="{{ resource.url }}"
+            data-module-resource-view="{{ h.dump_json(resource_view) }}"
+            id="hero_map"
+    >
+    </div>
+</div>

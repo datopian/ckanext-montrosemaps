@@ -1,0 +1,8 @@
+ {% import 'macros/form.html' as form %}
+
+    {% block form %}
+
+        {{ form.select('country', label=_('Country'), options=countries,
+            selected=resource_view['countries'], is_required=True) }}
+
+    {% endblock %}
