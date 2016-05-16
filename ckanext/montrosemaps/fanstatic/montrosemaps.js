@@ -11,10 +11,7 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
     };
 
     function initMap(elementId, resource, resourceView) {
-        console.log(resourceView);
-
         $.getJSON(resource['url']).done(function (data) {
-            console.log(data);
             buildMap(elementId, data, resourceView);
         }).fail(function (data) {
             console.log(data);
@@ -35,9 +32,25 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
         map.addLayer(osm);
 
         var layers = [];
+
+        var smallIcon = L.icon({
+            iconUrl: '/images/marker-icon.png',
+            shadowUrl: '/images/marker-shadow.png',
+            iconRetinaUrl: '/images/marker-icon-2x.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
         var geoL = L.geoJson(data, {
             style: function (feature) {
                 return feature.properties.style;
+            },
+            pointToLayer: function (fauture, latlng) {
+                return L.marker(latlng, {
+                    icon: smallIcon
+                });
             },
             onEachFeature: function (feature, layer) {
                 var popup = document.createElement("div"),
@@ -49,11 +62,10 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
                 header.appendChild(headerText);
                 for (var info in feature.properties) {
                     listElementText = document.createTextNode(feature.properties[info]);
-                    listElement =  document.createElement("li");
+                    listElement = document.createElement("li");
                     listElement.appendChild(listElementText);
                     list.appendChild(listElement);
                 }
-                console.log(feature);
                 popup.appendChild(header);
                 popup.appendChild(list);
                 layer.bindPopup(popup);
@@ -68,7 +80,7 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
 
         select_dataset.append('<option>Select Data Set</option>');
         for (var elem in layers) {
-            select_dataset.append('<option>' + layers[elem].name+ '</option>');
+            select_dataset.append('<option>' + layers[elem].name + '</option>');
         }
 
         select_dataset.change(
