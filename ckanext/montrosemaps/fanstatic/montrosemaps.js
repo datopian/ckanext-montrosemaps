@@ -20,8 +20,9 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
     }
 
     function buildMap(elementId, data, resourceView) {
+        var mainField = resourceView["main_field"];
         var map = new L.Map(elementId, {scrollWheelZoom: false});
-        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
         var osm = new L.TileLayer(osmUrl, {
             minZoom: 2,
@@ -42,7 +43,7 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
         });
-
+        console.log(resourceView);
         var geoL = L.geoJson(data, {
             style: function (feature) {
                 return feature.properties.style;
@@ -55,7 +56,7 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
             onEachFeature: function (feature, layer) {
                 var popup = document.createElement("div"),
                     header = document.createElement("h5"),
-                    headerText = document.createTextNode(feature.properties["Company Name"]),
+                    headerText = document.createTextNode(feature.properties[mainField]),
                     list = document.createElement("ul"),
                     listElement,
                     listElementText;
@@ -69,7 +70,7 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
                 popup.appendChild(header);
                 popup.appendChild(list);
                 layer.bindPopup(popup);
-                layer.name = feature.properties["Company Name"];
+                layer.name = feature.properties[mainField];
                 layers.push(layer);
             }
         }).addTo(map);

@@ -2,6 +2,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from pylons import config
 import mimetypes
+import urllib, json
 from logging import getLogger
 log = getLogger(__name__)
 
@@ -13,6 +14,7 @@ except ImportError:
 not_empty = plugins.toolkit.get_validator('not_empty')
 ignore_missing = plugins.toolkit.get_validator('ignore_missing')
 ignore_empty = plugins.toolkit.get_validator('ignore_empty')
+
 
 class MontrosemapsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer, inherit=True)
@@ -35,7 +37,8 @@ class MontrosemapsPlugin(plugins.SingletonPlugin):
 
     def info(self):
         schema = {
-            'country': [not_empty]
+            'country': [not_empty],
+            'main_field': [not_empty]
         }
 
         return {'name': 'Maps',
@@ -66,7 +69,15 @@ class MontrosemapsPlugin(plugins.SingletonPlugin):
             data_dict['resource']['url'] = \
                 proxy.get_proxified_resource_url(data_dict)
 
+        response = urllib.urlopen(data_dict['resource']['url'])
+        geojson = json.loads(response.read())
+        fields = []
+        for k, v in geojson.get("features")[0].get("properties").iteritems():
+            fields.append({'value': k})
+
+
         return {'resource': resource,
+                'fields': fields,
                 'resource_view': resource_view,
                 'countries': [{'value': 'Kenya'}],
                 }
