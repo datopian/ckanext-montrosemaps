@@ -26,7 +26,7 @@ this.ckan.views.montrosemaps = this.ckan.views.montrosemaps || {};
         var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
         var osm = new L.TileLayer(osmUrl, {
             minZoom: 2,
-            maxZoom: 8,
+            maxZoom: 18,
             attribution: osmAttrib
         });
 
